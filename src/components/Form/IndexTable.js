@@ -2,6 +2,7 @@ import React from "react";
 import './../CSS/style.css'
 import http from '../http.js'
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const IndexTable = () => {
   const [users, setUsers] = useState([]);
@@ -13,11 +14,16 @@ const IndexTable = () => {
   const fetchAllUsers = () => {
     http.get('/users').then(res=>{
       setUsers(res.data);
-    })
+    });
+  }
+  const deleteUser = (id) => {
+    http.delete('/users/'+id).then(res=>{
+      fetchAllUsers();
+    });
   }
     return (
         <>
-          <h2 className="mt-5">Table</h2>
+          <h2 className="mt-5">User Data</h2>
           <table className="table table-striped table-hover">
             <thead>
               <tr>
@@ -40,8 +46,8 @@ const IndexTable = () => {
                 <td>{user.city}</td>
                 <td>{user.pin}</td>
                 <td>
-                  <button className="btn btn-secondary btn-sm"><i className="bi bi-pencil mx-2"></i></button>&nbsp;
-                  <button className="btn btn-default btn-sm border"><i className="bi bi-trash mx-2"></i></button>
+                  <Link to={{ pathname:"/edit/"+user.id }}><button className="btn btn-secondary btn-sm m-1"><i className="bi bi-pencil mx-2"></i></button></Link>
+                  <button className="btn btn-default btn-sm border"><i className="bi bi-trash mx-2" onClick={()=>{deleteUser(user.id)}}></i></button>
                 </td>
               </tr>
               ))}
