@@ -4,6 +4,7 @@ import http from '../http'
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Edit = (props) => {
     const navigate = useNavigate();
@@ -36,10 +37,12 @@ const Edit = (props) => {
     }
 
     const submitForm = () =>{
+        axios.get('/sanctum/csrf-cookie').then(response => {
         http.put('/users/'+id,inputs).then((res)=>{
             alert('Success');
             navigate('/');
-        })
+        });
+        });
     }
 
     return (

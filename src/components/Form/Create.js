@@ -3,6 +3,7 @@ import './../CSS/style.css'
 import http from './../http'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Create = () => {
     const navigate = useNavigate();
@@ -12,11 +13,13 @@ const Create = () => {
         const value = event.target.value;
         setInputs(values => ({...values,[name]:value}))
     }
-
+   
     const submitForm = () =>{
-        http.post('/users',inputs).then((res)=>{
-            navigate('/');
-        })
+        axios.get('/sanctum/csrf-cookie').then(response => {
+            http.post('/users',inputs).then((res)=>{
+                navigate('/');
+            });
+        });
     }
 
     return (
